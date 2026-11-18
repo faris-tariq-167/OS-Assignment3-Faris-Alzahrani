@@ -125,75 +125,75 @@
 **Challenges**: I did not understand why the same process was picked by three CPUs
 
 **Solution**: Read `ReadyQueue.poll()` again and found the `RaceWindow.pause()` between reading the head and removing it
-
+ Ready Queue Lock. I used ReentrantLock to protect the shared ready queue operations, including add(), poll(), processOf(), and snapshot()
 **Time spent**: 45 minutes
 
 ---
 
 ## Your Development Log
 
-### Entry 1 - [Date and Time]
-**What I did**:
+### Entry 1 - [November 16, 2026]
+**What I did**:Forked the original assignment repository from GitHub.
 
-**Details**:
+**Details**:Created my own fork of the instructor's repository to have a separate copy of the starter project. Prepared the repository to begin working on the assignment
 
-**Challenges**:
+**Challenges**:Understanding the initial repository setup and making sure I was working on my own fork
 
-**Solution**:
+**Solution**:Followed the GitHub forking process and checked that the fork was available in my GitHub account
 
-**Time spent**:
-
----
-
-### Entry 2 - [Date and Time]
-**What I did**:
-
-**Details**:
-
-**Challenges**:
-
-**Solution**:
-
-**Time spent**:
+**Time spent**:1 hours
 
 ---
 
-### Entry 3 - [Date and Time]
-**What I did**:
+### Entry 2 - [November 17, 2026]
+**What I did**:Ready Queue Lock
 
-**Details**:
+**Details**:Used ReentrantLock to protect the shared ready queue operations, including add(), poll(), processOf(), and snapshot(). Ensured that the critical sections were protected from simultaneous access by multiple CPU threads
 
-**Challenges**:
+**Challenges**:Multiple CPU threads could access the ready queue at the same time, potentially causing race conditions and allowing more than one CPU to select the same process
 
-**Solution**:
+**Solution**:Used a shared lock with try-finally to ensure mutual exclusion and guarantee that the lock is released after each operation
 
-**Time spent**:
-
----
-
-### Entry 4 - [Date and Time]
-**What I did**:
-
-**Details**:
-
-**Challenges**:
-
-**Solution**:
-
-**Time spent**:
+**Time spent**:2 hours
 
 ---
 
-### Entry 5 - [Date and Time]
-**What I did**:
+### Entry 3 - [ November 17, 2026]
+**What I did**: Statistics Locks
 
-**Details**:
+**Details**:Used ReentrantLock to protect shared statistics, including the context switch count, completed process count, and total service time. Also protected the corresponding getter methods to ensure consistent access to shared data
 
-**Challenges**:
+**Challenges**:Multiple CPU threads could update shared statistics simultaneously, which could cause race conditions and incorrect results
 
-**Solution**:
+**Solution**:Used a shared statsLock to protect the statistics update and read operations. Applied try-finally to ensure the lock was properly released
 
-**Time spent**:
+**Time spent**:2 hours
+
+---
+
+### Entry 4 - [November 18, 2026]
+**What I did**:Counting Semaphore
+
+**Details**:Added a counting semaphore to the ready queue with an initial value of zero. Replaced the busy-waiting mechanism with semaphore.acquire() and used semaphore.release() when processes were added to the queue. Also implemented shutdown signaling to wake up blocked CPU threads when all processes were completed
+
+**Challenges**:Ensuring that CPU threads would not remain blocked after all processes had finished executing
+
+**Solution**:Implemented signalShutdown() to release the semaphore permits needed to wake up the waiting CPU threads and allow the program to terminate normally
+
+**Time spent**:2 hours
+
+---
+
+### Entry 5 - [November 18, 2026]
+**What I did**:Tested the final implementation and checked the synchronization results
+
+**Details**:Ran the program five times to verify that the three synchronization features worked correctly. Checked the shared statistics, completed processes, context switches, and busy-waiting polls
+
+**Challenges**:Making sure that the results remained consistent across multiple executions and that all CPU threads terminated correctly
+
+**Solution**:Repeated the tests five times and checked the verification output after each execution to confirm that the program completed without synchronization errors
+
+**Time spent**:30 minutes
 
 ---
 
@@ -214,13 +214,13 @@
 
 > 💡 **TIP:** Fill this in **last**, after all entries are written.
 
-**Total time spent on assignment**: [X hours]
+**Total time spent on assignment**: [7 hours and 30 minutes]
 
-**Most challenging part**:
+**Most challenging part**:The most challenging part was implementing the synchronization mechanisms, especially the counting semaphore. Understanding how to wake up blocked CPU threads after all processes were completed required careful implementation and testing
 
-**Most interesting learning**:
+**Most interesting learning**:The most interesting thing I learned was how synchronization tools such as ReentrantLock and Semaphore prevent race conditions and coordinate multiple threads safely
 
-**What I would do differently next time**:
+**What I would do differently next time**:I would divide the assignment into smaller tasks, test each feature immediately after implementing it, and organize my work sessions more effectively
 
 ---
 
