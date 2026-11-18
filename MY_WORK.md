@@ -298,20 +298,42 @@
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[The original starter code had a race condition because multiple CPUs updated the shared statistics without a mutex lock. For example, CPU-1 reads contextSwitchCount = 12, then CPU-2 also reads 12 before CPU-1 writes its result. CPU-1 writes 13, and CPU-2 also writes 13, so one increment is lost and the correct value should have been 14. The same problem can happen on a real machine without RaceWindow.pause() because a thread can be interrupted between reading and writing; it is difficult to detect because thread execution timing is unpredictable]
 
 Verification block of the **original starter**:
 ```
-[Paste the verification block (or the exception/watchdog message) of the starter here]
+[Original starter output was not saved in a readable format.
+The expected values for my student ID (446050167) are:
+
+Context switches: 27
+Completed processes: 15
+Total service time: 90155 ms
+Busy-waiting polls: 0 ]
 ```
 
 Verification block of **my final version**:
 ```
-[Paste the verification block of your final version here (all lines ✔)]
+[Context switches (quanta executed)     expected 27       observed 27
+Completed processes                    expected 15       observed 15
+Total service time (ms)                expected 90155    observed 90155
+Busy-waiting polls (must be 0)         expected 0        observed 0
+All shared values are consistent]
 ```
 
 **Explanation of the timeline:**
-[Explain the lost update step by step.]
+[1-CPU-1 reads contextSwitchCount, which is 12.
+
+2-CPU-2 reads the same value, 12.
+
+3-CPU-1 executes RaceWindow.pause().
+
+4-CPU-2 also executes RaceWindow.pause().
+
+5-CPU-1 writes 13.
+
+6-CPU-2 writes 13, overwriting the previous update.
+
+7-The final value is 13 instead of 14. One increment is lost.]
 
 ## Question 2: Critical Sections and Lock Granularity
 
@@ -321,12 +343,12 @@ Verification block of **my final version**:
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[In my final code, I used two ReentrantLock objects: statsLock protects the three statistics variables and their update and getter methods, while queueLock protects the ready queue's list and map in add(), poll(), processOf(), and snapshot(). I chose one lock for all three statistics because it is simpler to manage, but the trade-off is that updates to independent statistics must wait for each other; using one lock per variable could improve concurrency but adds complexity. The ready queue has a separate lock because it is a different shared resource, so queue operations do not need to wait for statistics operations. The locks provide mutual exclusion, and try-finally ensures they are released; however, the default ReentrantLock is not fair, meaning it does not guarantee FIFO access or strict bounded waiting, although threads can make progress when locks are released]
 
 | Critical section (variable / method) | Lock used | Why it needs protection |
-|---|---|---|
-| [e.g., `ReadyQueue.poll()`] | [lock name] | [reason] |
-| [...] | [...] | [...] |
+|SharedStats (getter methods)|statsLock|Ensures shared statistics are read safely while other CPUs may update them|
+| [e.g., `ReadyQueue.poll()`] | [queueLock] | [Protects the shared LinkedList and HashMap from race conditions when multiple CPUs access or modify them] |
+| [SharedStats (incrementContextSwitch, incrementCompletedProcess, addServiceTime)] | [statsLock] | [Prevents lost updates when multiple CPUs modify shared statistics at the same time] |
 
 ## Question 3: Busy Waiting vs Semaphore
 
@@ -336,7 +358,7 @@ Verification block of **my final version**:
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[In the original starter code, each CPU repeatedly checked the ready queue and, if it was empty, increased busyWaitPolls, slept for 20 milliseconds, and checked again; this wastes time and creates unnecessary polling. In my final version, I used a counting semaphore to represent the number of processes available in the ready queue, and its initial value is 0 because the queue starts empty. After the main thread adds all 15 initial processes, the semaphore value becomes 15. When the last process is completed, the last CPU calls release(totalCPUs) to wake all four CPUs that may be blocked in acquire(); without this release, those CPUs could remain blocked forever and the simulation would not terminate]
 
 ## Question 4: Classical Problems and Deadlock
 
@@ -347,24 +369,28 @@ Verification block of **my final version**:
 **Your Answer:** *(3-5 sentences)*
 
 **Classical problem and roles**:
-[Name the problem; who is the producer, who is the consumer?]
+[This is the Producer-Consumer (Bounded-Buffer) Problem. The main program acts as the initial producer by adding processes to the ready queue, while the CPUs act as both consumers (removing processes) and producers (re-enqueuing unfinished processes).]
 
 **Semaphores for a bounded queue (name and initial value)**:
-[Name the three semaphores and their initial values.]
+[empty = K — represents the available slots.
+
+full = 0 — represents the number of occupied slots.
+
+mutex = 1 — ensures mutual exclusion when accessing the queue.]
 
 **Deadlock scenario and prevention**:
-[Describe the scenario and the necessary condition you would break.]
+[A deadlock can occur if a producer acquires the mutex before waiting on empty when the queue is full, because it holds the mutex while waiting for a free slot, but the consumer needs that mutex to remove an item and create a free slot. To prevent this, we break the Hold and Wait condition by waiting on empty (or full for a consumer) before acquiring the mutex]
 
 ## Summary
 
 **Key concepts I understood through these questions:**
-1.
-2.
-3.
+1.How race conditions happen when multiple threads access shared data at the same time
+2.How ReentrantLock protects critical sections and prevents data corruption
+3.How semaphores coordinate threads and prevent busy waiting
 
 **Concepts I need to study more:**
-1.
-2.
+1.Understanding the four necessary conditions for deadlock and how to prevent it
+2.Understanding how to use semaphores correctly in different synchronization problems
 
 ---
 
