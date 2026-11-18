@@ -240,7 +240,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[I learned that synchronization is important when multiple threads use the same resources. Without synchronization, two CPUs might try to access the same process at the same time and cause errors. I learned that ReentrantLock allows only one CPU to access the protected code at a time. I also learned that try-finally makes sure the lock is released even if an error happens. The semaphore helps CPUs wait until a process is available instead of checking the ready queue again and again. I was surprised by how many errors appeared when I first ran the original code.]
 
 ## Question 2: What was the most challenging part of this assignment?
 
@@ -248,7 +248,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[The most challenging part of this assignment was understanding why the original code failed. At first, I saw many errors when I ran the program, but I did not understand what caused them. I found that multiple CPUs could try to access the same process at the same time. It was difficult for me to understand how this problem happened because the threads were running at the same time. I had to understand race conditions before I could fix the problem. After learning how synchronization works, I was able to understand the errors and work on fixing them]
 
 ## Question 3: How did you overcome the challenges you faced?
 
@@ -256,7 +256,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[I overcame the challenges by reading the code more than once to understand how it worked. I tried to understand each part of the code before making any changes. After that, I started fixing the problems step by step. I ran the program after each change to check if it worked correctly. If I found another error, I went back to the code and checked what caused it. This helped me understand the code better and fix the synchronization problems]
 
 ## Question 4: Where can synchronization concepts be applied in real-world applications?
 
@@ -264,7 +264,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[Synchronization is used in many real-world applications. For example, in banking systems, it helps prevent problems when multiple people access the same account at the same time. In ticket booking systems, it prevents two people from booking the same seat. It is also used in databases when many users try to access or update the same data. These systems need synchronization to keep the data correct and avoid errors. This is similar to our assignment, where we used locks and semaphores to manage access between multiple CPUs]
 
 ### Optional: What would you like to learn more about?
 
