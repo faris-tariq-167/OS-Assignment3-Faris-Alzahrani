@@ -132,7 +132,7 @@
 
 ## Your Development Log
 
-### Entry 1 - [November 16, 2026]
+### Entry 1 - [November 16, 2026, 3:00 PM]
 **What I did**:Forked the original assignment repository from GitHub.
 
 **Details**:Created my own fork of the instructor's repository to have a separate copy of the starter project. Prepared the repository to begin working on the assignment
@@ -145,7 +145,7 @@
 
 ---
 
-### Entry 2 - [November 17, 2026]
+### Entry 2 - [November 17, 2026, 11:00 AM]
 **What I did**:Ready Queue Lock
 
 **Details**:Used ReentrantLock to protect the shared ready queue operations, including add(), poll(), processOf(), and snapshot(). Ensured that the critical sections were protected from simultaneous access by multiple CPU threads
@@ -158,7 +158,7 @@
 
 ---
 
-### Entry 3 - [ November 17, 2026]
+### Entry 3 - [ November 17, 2026, 1:00 PM]
 **What I did**: Statistics Locks
 
 **Details**:Used ReentrantLock to protect shared statistics, including the context switch count, completed process count, and total service time. Also protected the corresponding getter methods to ensure consistent access to shared data
@@ -171,7 +171,7 @@
 
 ---
 
-### Entry 4 - [November 18, 2026]
+### Entry 4 - [November 18, 2026, 3:00 PM]
 **What I did**:Counting Semaphore
 
 **Details**:Added a counting semaphore to the ready queue with an initial value of zero. Replaced the busy-waiting mechanism with semaphore.acquire() and used semaphore.release() when processes were added to the queue. Also implemented shutdown signaling to wake up blocked CPU threads when all processes were completed
@@ -184,7 +184,7 @@
 
 ---
 
-### Entry 5 - [November 18, 2026]
+### Entry 5 - [November 18, 2026, 5:00 PM]
 **What I did**:Tested the final implementation and checked the synchronization results
 
 **Details**:Ran the program five times to verify that the three synchronization features worked correctly. Checked the shared statistics, completed processes, context switches, and busy-waiting polls
